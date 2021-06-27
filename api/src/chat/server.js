@@ -14,47 +14,40 @@ server.listen(3000, () => {
   console.log('listening on *:3000');
 });
 
-mongo.connect('mongodb://127.0.0.1/chat' , function(err , db){
-    if (err)
-        throw err;
-    
-    console.log('mongodb connect');
 
-    io.on('connected' , function(){
-        let chat = db.collection('chats');
 
-        sendstatus = function(s){
-            socket.emit('status' , s);
-        }
+    // io.on('connected' , function(){
+    //     let chat = db.collection('chats');
 
-        chat.find().limit(100).sort({_id1}).toArray(
-            function(err , res){
-                if (err)
-                    throw err;
+    //     sendstatus = function(s){
+    //         socket.emit('status' , s);
+    //     }
 
-                socket.emit('output' , res);
-            }
-        );
+    //     chat.find().limit(100).sort({_id1}).toArray(
+    //         function(err , res){
+    //             if (err)
+    //                 throw err;
 
-        socket.on('input' , function(data){
-            let name = data.name;
-            let message = data.message;
+    //             socket.emit('output' , res);
+    //         }
+    //     );
 
-            if (name==''  || message=='')
-                sendstatus('please enter a valid message and a name');
+    //     socket.on('input' , function(data){
+    //         let name = data.name;
+    //         let message = data.message;
 
-            else{
-                chat.insert({name:name , message:message} , function(){
-                    io.emit('output' , [data]);
+    //         if (name==''  || message=='')
+    //             sendstatus('please enter a valid message and a name');
 
-                    sendstatus({
-                        message : 'message event',
+    //         else{
+    //             chat.insert({name:name , message:message} , function(){
+    //                 io.emit('output' , [data]);
+
+    //                 sendstatus({
+    //                     message : 'message event',
                 
-                    });
-                });
-            }
-        });
-    });
-
-
-});
+    //                 });
+    //             });
+    //         }
+    //     });
+    // });
